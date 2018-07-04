@@ -1,11 +1,11 @@
-import { Injectable } from "@angular/core";
-import { HttpClient } from "@angular/common/http";
-import { Subject } from "rxjs";
+import { Injectable } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+import { Subject } from 'rxjs';
 import { map } from 'rxjs/operators';
 
-import { Post } from "./post.model";
+import { Post } from './post.model';
 
-@Injectable({ providedIn: "root" })
+@Injectable({ providedIn: 'root' })
 export class PostsService {
   private posts: Post[] = [];
   private postsUpdated = new Subject<Post[]>();
@@ -27,8 +27,8 @@ export class PostsService {
             content: post.content,
             id: post._id
           };
-          console.log('getPosts.map: ' + post._id + '-' + post.title);
-        })
+          // console.log('getPosts.map: ' + post._id + '-' + post.title);
+        });
       }))
       .subscribe((transformedPosts) => {
         this.posts = transformedPosts;
@@ -45,7 +45,7 @@ export class PostsService {
   addPost(title: string, content: string) {
     // console.log('addPost');
     const post: Post = { id: null, title: title, content: content };
-    this.http.post<{message: string}>('http://localhost:3000/api/posts', post)
+    this.http.post<{message: string, postId: string}>('http://localhost:3000/api/posts', post)
       .subscribe((responseData) => {
         const id = responseData.postId;
         post.id = id;
