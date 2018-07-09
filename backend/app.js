@@ -1,28 +1,36 @@
-const express = require('express');
-const bodyParser = require('body-parser');
-const mongoose = require('mongoose');
+const path = require("path");
+const express = require("express");
+const bodyParser = require("body-parser");
+const mongoose = require("mongoose");
 
-const postsRoutes = require('./routes/posts');
+const postsRoutes = require("./routes/posts");
 // const Post = require('./models/post');
 
 const app = express();
 
-mongoose.connect('mongodb://localhost:27017/mean')
+mongoose
+  .connect("mongodb://localhost:27017/mean")
   .then(() => {
-    console.log('Connected to Mongo DB!');
-})
+    console.log("Connected to Mongo DB!");
+  })
   .catch(() => {
-    console.log('Connection failed!');
-});
-
+    console.log("Connection failed!");
+  });
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
+app.use("/images", express.static(path.join("backend/images")));
 
 app.use((req, res, next) => {
-  res.setHeader('Access-Control-Allow-Origin', '*');
-  res.setHeader('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept');
-  res.setHeader('Access-Control-Allow-Methods', 'GET, POST, FETCH, DELETE, OPTIONS, PUT, HEAD');
+  res.setHeader("Access-Control-Allow-Origin", "*");
+  res.setHeader(
+    "Access-Control-Allow-Headers",
+    "Origin, X-Requested-With, Content-Type, Accept"
+  );
+  res.setHeader(
+    "Access-Control-Allow-Methods",
+    "GET, POST, FETCH, DELETE, OPTIONS, PUT, HEAD"
+  );
   next();
 });
 
@@ -103,5 +111,5 @@ app.use((req, res, next) => {
 //   });
 // });
 
-app.use('/api/posts',postsRoutes);
+app.use("/api/posts", postsRoutes);
 module.exports = app;
